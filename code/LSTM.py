@@ -101,7 +101,7 @@ def train_model(train_data, val_data, max_len, split, batch_size):
 
 		callback = keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0.01, patience= 100, restore_best_weights = True)
 
-		model.fit(dataset_train, epochs= 5 , validation_data= dataset_val)
+		model.fit(dataset_train, epochs= 5000 , validation_data= dataset_val)
 		model_name= "./models/lstm_split_" + str(split) + '_max_len_'+str(max_len)
 		keras.models.save_model(model,model_name )
 		print("\ncreated model:",model_name )
