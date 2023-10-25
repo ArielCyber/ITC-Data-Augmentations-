@@ -35,17 +35,17 @@ def reset_keras(model):
 def main():
     # set code arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('data_dir')
-    parser.add_argument('augmentation', choices = ['lstm', 'average', 'mtu'])
-    parser.add_argument('--test_split', type=float, default= 0.2, required = False)
-    parser.add_argument('--val_split', type=float, default= 0.2, required = False)
-    parser.add_argument('--batch_size', type=int, default= 32, required = False)
-    parser.add_argument('--split', type=int, default= 16, required = False)
-    parser.add_argument('--max_len', type=int, default= 32, required = False)
-    parser.add_argument('--data_max_size', type=int, default= -1, required = False)
-    parser.add_argument('--avg_n', type=int, default= 2, required = False)
-    parser.add_argument('--th_min', type=int, default= 750, required = False)
-    parser.add_argument('--th_max', type=int, default= 1200, required = False)
+    parser.add_argument('data_dir', help='Directory containing the training data.')
+    parser.add_argument('augmentation', choices=['lstm', 'average', 'mtu'], help='Augmentation method to use.')
+    parser.add_argument('--test_split', type=float, default=0.2, required=False, help='Fraction of the data to use for the test set.')
+    parser.add_argument('--val_split', type=float, default=0.2, required=False, help='Fraction of the data to use for the validation set.')
+    parser.add_argument('--batch_size', type=int, default=32, required=False, help='Batch size to use for training.')
+    parser.add_argument('--split', type=int, default=16, required=False, help='The split of the flow.')
+    parser.add_argument('--max_len', type=int, default=32, required=False, help='Maximum length of a flow.')
+    parser.add_argument('--data_max_size', type=int, default=-1, required=False, help='Maximum number of data points to use.')
+    parser.add_argument('--avg_n', type=int, default=2, required=False, help='Number of data points to average for the Average augmentation.')
+    parser.add_argument('--th_min', type=int, default=750, required=False, help='Minimum threshold for the MTU augmentation.')
+    parser.add_argument('--th_max', type=int, default=1200, required=False, help='Maximum threshold for the MTU augmentation.')
 
     args = parser.parse_args()
     # fix data directory path 
