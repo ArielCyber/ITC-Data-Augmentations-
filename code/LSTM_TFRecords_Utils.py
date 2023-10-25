@@ -85,7 +85,7 @@ def convert_to_lstm_tfrecord_label(file_name, mask, label, max_len, split):
         dataset = transpose_images(dataset)
         for img in dataset:
             img = img.astype(np.float32)
-            img_s_half = img[:split, : ]
+            img_s_half = img[split:max_len , :]
             feature = { 
                 'height_s': _int64_feature(img_s_half.shape[0]),
                 'width': _int64_feature(img_s_half.shape[1]),

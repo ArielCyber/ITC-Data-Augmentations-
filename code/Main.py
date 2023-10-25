@@ -152,11 +152,13 @@ def main():
     print("\n---------- Generating LSTM data ----------")
     LSTM_Generate_Data.generate_data(args.data_dir, masks_name, args.max_len, args.split, classes)
 
-    aug_train = glob.glob(args.data_dir + '**/*_first_15_train.tfrecords')
-    aug_val = glob.glob(args.data_dir + '**/*_first_15_val.tfrecords')
+    print("\n---------- Converting LSTM generated data to tfrecords ----------")
+    TFRecords_Converter.iterate_all_classes(args.data_dir, masks_name, classes, f'*_first_15_lstm_split_{args.split}_max_len_{args.max_len}.npy')
 
     print("\n---------- Training classifier with LSTM generated data ----------")
-    model = Classifier_train.train_model(args.batch_size, no_aug_train, no_aug_val, aug_train, aug_val, "_lstm_generated")
+    aug_train = glob.glob(args.data_dir + f'**/*_first_15_lstm_split_{args.split}_max_len_{args.max_len}_train.tfrecords')
+    aug_val = glob.glob(args.data_dir + f'**/*_first_15_lstm_split_{args.split}_max_len_{args.max_len}_val.tfrecords')
+    model = Classifier_Train.train_model(args.batch_size, num_of_classes, no_aug_train, no_aug_val, aug_train, aug_val, "_lstm_generated")
 
     reset_keras(model)
 

@@ -21,7 +21,9 @@ def ssim_loss(y_true, y_pred):
 
 class classifier_loss:
 	def __init__(self, max_len, split):
-		self.classifier = keras.models.load_model("./models/lstm_classifier_split_" + str(split) + '_max_len_'+str(max_len))
+		self.max_len = max_len
+		self.split = split
+		self.classifier = keras.models.load_model("./models/lstm_classifier_split_" + str(self.split) + '_max_len_'+str(self.max_len))
 
 	def __call__(self, y_true, y_pred):
 		y_true = tf.cast(y_true, dtype= tf.float32)
@@ -39,6 +41,12 @@ class classifier_loss:
 						tf.image.ssim(y_true, y_pred, 1.0, filter_size= 3)
 					)
 					)
+	def get_config(self):
+		config = {
+			'max_len': self.max_len,
+			'split': self.split
+		}
+		return config
 
 
 def lstm(max_len, split):
@@ -93,7 +101,7 @@ def train_model(train_data, val_data, max_len, split, batch_size):
 
 		callback = keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0.01, patience= 100, restore_best_weights = True)
 
-		model.fit(dataset_train, epochs= 5000 , validation_data= dataset_val)
+		model.fit(dataset_train, epochs= 5 , validation_data= dataset_val)
 		model_name= "./models/lstm_split_" + str(split) + '_max_len_'+str(max_len)
 		keras.models.save_model(model,model_name )
 		print("\ncreated model:",model_name )
