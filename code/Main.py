@@ -59,8 +59,10 @@ def main():
     num_of_classes = len(classes)
 
     print("\n---------- Running Train Test split with test split of:", args.test_split, "----------")
+
     if args.data_max_size != -1:
         print("---------- with data max size of:", args.data_max_size)
+
     Concat_Files.iterate_all_classes(args.data_dir, classes, 1 - args.test_split, args.data_max_size)
     
     print("\n---------- Running Train Validation split with validation split of:", args.val_split, "----------")
@@ -99,7 +101,7 @@ def main():
 
         aug_train = glob.glob(args.data_dir + '**/*_first_15_mtu_train.tfrecords')
         aug_val = glob.glob(args.data_dir + '**/*_first_15_mtu_val.tfrecords')
-        model_name_suffix = f"_mtu"
+        model_name_suffix = "_mtu"
 
     print("\n---------- Training classifier ----------")
     model = Classifier_Train.train_model(args.batch_size, num_of_classes, no_aug_train, no_aug_val, aug_train, aug_val, model_name_suffix)
