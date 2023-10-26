@@ -78,6 +78,11 @@ def main():
     aug_val = []
     model_name_suffix = ""
 
+    print("\n---------- Training test classifier ----------")
+    model = Classifier_Train.train_model(args.batch_size, num_of_classes, no_aug_train, no_aug_val, aug_train, aug_val, model_name_suffix)
+
+    reset_keras(model)
+
     if args.augmentation == 'average':
         print("\n---------- Generating average data with average of:",args.avg_n, "----------")
         avg_masks = Average_Augmentation.iterate_all_classes(args.data_dir, masks_name, classes, args.avg_n)
@@ -91,7 +96,7 @@ def main():
         no_aug_train = []
         no_aug_val = []
     
-    if args.augmentation == 'mtu':
+    elif args.augmentation == 'mtu':
         print("\n---------- Generating MTU data with threshold min of:", args.th_min, "and threshold max of:", args.th_max, "----------")
         MTU_Augmentation.iterate_all_classes(args.data_dir, args.th_min, args.th_max)
         MTU_Augmentation.iterate_all_classes(args.data_dir, args.th_min, args.th_max, '*first_15_test.npy')
@@ -103,10 +108,11 @@ def main():
         aug_val = glob.glob(args.data_dir + '**/*_first_15_mtu_val.tfrecords')
         model_name_suffix = "_mtu"
 
-    print("\n---------- Training classifier ----------")
-    model = Classifier_Train.train_model(args.batch_size, num_of_classes, no_aug_train, no_aug_val, aug_train, aug_val, model_name_suffix)
+    if args.augmentation != 'lstm':
+        print("\n---------- Training classifier ----------")
+        model = Classifier_Train.train_model(args.batch_size, num_of_classes, no_aug_train, no_aug_val, aug_train, aug_val, model_name_suffix)
 
-    reset_keras(model)
+        reset_keras(model)
 
     if args.augmentation == "average":
         no_aug_train = glob.glob(args.data_dir + '**/*_first_15_train.tfrecords')
@@ -120,7 +126,6 @@ def main():
     if args.augmentation != 'lstm':
         return
     
-
     print("\n---------- Converting data to LSTM tfrecords ----------")
     LSTM_TFRecords_Converter.iterate_all_classes(args.data_dir, masks_name, True, args.max_len, args.split, classes )
     LSTM_TFRecords_Converter.iterate_all_classes(args.data_dir, masks_name, False, args.max_len, args.split, classes )

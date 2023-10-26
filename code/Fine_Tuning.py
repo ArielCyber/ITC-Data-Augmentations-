@@ -30,7 +30,7 @@ def train_model(model_name, batch_size, num_of_classes, train_data, val_data):
 
 	print(model.summary())
 	model.fit(dataset_train, epochs= 20 , callbacks= [callback] , validation_data= dataset_val) 
-	model_name = f"./models/classifier_avg_tl"
+	model_name += "_tl"
 	keras.models.save_model(model, model_name)
 	print("\ncreated model:", model_name)
 
@@ -42,7 +42,7 @@ def train_model(model_name, batch_size, num_of_classes, train_data, val_data):
 	print(model.summary())
 	model.fit(dataset_train, epochs= 30  , callbacks= [callback], validation_data= dataset_val)
 
-	model_name = f"./models/classifier_avg_ft"
+	model_name = model_name[:-3] + "_ft"
 	keras.models.save_model(model, model_name)
 	print("\ncreated model:", model_name)
 	return model

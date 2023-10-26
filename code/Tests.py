@@ -25,11 +25,11 @@ def detranspose_images(imgs_1, imgs_2):
 def main():
     # set code arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('data_dir')
-    parser.add_argument('augmentation', choices = ['lstm', 'average', 'mtu'])
-    parser.add_argument('--split', type=int, default= 16, required = False)
-    parser.add_argument('--max_len', type=int, default= 32, required = False)
-    parser.add_argument('--avg_n', type=int, default= 2, required = False)
+    parser.add_argument('data_dir', help='Directory containing the test data.')
+    parser.add_argument('augmentation', choices=['lstm', 'average', 'mtu'], help='Augmentation method to test.')
+    parser.add_argument('--split', type=int, default=16, required=False, help='The split of the flow.')
+    parser.add_argument('--max_len', type=int, default=32, required=False, help='Maximum length of a flow.')
+    parser.add_argument('--avg_n', type=int, default=2, required=False, help='Number of data points to average for the Average augmentation.')
 
     args = parser.parse_args()
     # fix data directory path 
@@ -166,8 +166,8 @@ def main():
         print("\nloading model: classifier\n")
         model_1 = keras.models.load_model("./models/classifier")
 
-        print("\nloading model: classifier_avg_ft\n")
-        model_2 = keras.models.load_model("./models/classifier_avg_ft")
+        print(f"\nloading model: classifier_avg_{args.avg_n}_ft\n")
+        model_2 = keras.models.load_model(f"./models/classifier_avg_{args.avg_n}_ft")
 
         print("\n---------- Running Test 1: ----------")
         print(  "----------  The contribution of generated data as augmentation technique. ----------")
@@ -182,7 +182,7 @@ def main():
         print(confusion_matrix(y_true= y_true, y_pred= y_pred_1))
         print(classification_report(y_true= y_true, y_pred= y_pred_1))
 
-        print("\n\nmodel: classifier_avg_ft performance")
+        print(f"\n\nmodel: classifier_avg_{args.avg_n}_ft performance")
         print(confusion_matrix(y_true= y_true, y_pred= y_pred_2))
         print(classification_report(y_true= y_true, y_pred= y_pred_2))
 
