@@ -16,6 +16,9 @@ import MTU_Augmentation
 import TFRecords_Converter
 import TFRecords_Utils
 import Train_Validation_Split
+import Change_RTT_Augmentation
+import Time_Shift_Augmentation
+import Packet_Loss_Augmentation
 
 from keras.backend import clear_session
 import tensorflow
@@ -36,7 +39,7 @@ def main():
     # set code arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('data_dir', help='Directory containing the training data.')
-    parser.add_argument('augmentation', choices=['lstm', 'average', 'mtu'], help='Augmentation method to use.')
+    parser.add_argument('augmentation', choices=['lstm', 'average', 'mtu', 'change_rtt', 'time_shift', 'packet_loss'], help='Augmentation method to use.')
     parser.add_argument('--test_split', type=float, default=0.2, required=False, help='Fraction of the data to use for the test set.')
     parser.add_argument('--val_split', type=float, default=0.2, required=False, help='Fraction of the data to use for the validation set.')
     parser.add_argument('--batch_size', type=int, default=32, required=False, help='Batch size to use for training.')
@@ -107,6 +110,43 @@ def main():
         aug_train = glob.glob(args.data_dir + '**/*_first_15_mtu_train.tfrecords')
         aug_val = glob.glob(args.data_dir + '**/*_first_15_mtu_val.tfrecords')
         model_name_suffix = "_mtu"
+
+    elif args.augmentation == 'change_rtt':
+        print("\n---------- Generating a random changed rtt data ----------")
+        Change_RTT_Augmentation.iterate_all_classes(args.data_dir, args.th_min, args.th_max)
+        Change_RTT_Augmentation.iterate_all_classes(args.data_dir, args.th_min, args.th_max, '*first_15_test.npy')
+
+        print("\n---------- Converting changed RTT data to tfrecords ----------")
+        TFRecords_Converter.iterate_all_classes(args.data_dir, masks_name, classes, f'*_first_15_rtt.npy')
+
+        aug_train = glob.glob(args.data_dir + '**/*_first_15_rtt_train.tfrecords')
+        aug_val = glob.glob(args.data_dir + '**/*_first_15_rtt_val.tfrecords')
+        model_name_suffix = "_rtt"
+
+    elif args.augmentation == 'time_shift':
+        print("\n---------- Generating a random time shifted data ----------")
+        Time_Shift_Augmentation.iterate_all_classes(args.data_dir, args.th_min, args.th_max)
+        Time_Shift_Augmentation.iterate_all_classes(args.data_dir, args.th_min, args.th_max, '*first_15_test.npy')
+
+        print("\n---------- Converting time shift data to tfrecords ----------")
+        TFRecords_Converter.iterate_all_classes(args.data_dir, masks_name, classes, f'*_first_15_time_shifted.npy')
+
+        aug_train = glob.glob(args.data_dir + '**/*_first_15_time_shifted_train.tfrecords')
+        aug_val = glob.glob(args.data_dir + '**/*_first_15_time_shifted_val.tfrecords')
+        model_name_suffix = "_time_shift"
+    
+    elif args.augmentation == 'packet_loss':
+        print("\n---------- Generating a random packet loss data ----------")
+        Time_Shift_Augmentation.iterate_all_classes(args.data_dir, args.th_min, args.th_max)
+        Time_Shift_Augmentation.iterate_all_classes(args.data_dir, args.th_min, args.th_max, '*first_15_test.npy')
+
+        print("\n---------- Converting packet loss data to tfrecords ----------")
+        TFRecords_Converter.iterate_all_classes(args.data_dir, masks_name, classes, f'*_first_15_packet_loss.npy')
+
+        aug_train = glob.glob(args.data_dir + '**/*_first_15_packet_loss_train.tfrecords')
+        aug_val = glob.glob(args.data_dir + '**/*_first_15_packet_loss_val.tfrecords')
+        model_name_suffix = "_packet_loss"
+
 
     if args.augmentation != 'lstm':
         print("\n---------- Training classifier ----------")
