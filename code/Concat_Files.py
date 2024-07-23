@@ -11,12 +11,16 @@ def get_label(file_path, classes):
 
 def iterate_all_classes(data_dir, classes, p, data_max_size):
     for _dir in Path(data_dir).glob('*/'):
+        # check if dir is folder. if not, continue
+        if not os.path.isdir(_dir):
+            continue
         _dir = str(_dir)
         print("\nworking on " + _dir)
         data = []
         label = classes[get_label(_dir, classes)]
         files_to_remove = []
         for file_name in Path(_dir).glob('*first_15_[0-9].npy'):
+            # print(f"*********************************{file_name}")
             files_to_remove.append(file_name)
             file_name = str(file_name)
             print("working on:", file_name)
