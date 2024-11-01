@@ -115,6 +115,19 @@ In the paper we tested our data augmentation on three different datasets.
 * consists of real-world data captured in 2023 and is a commercial dataset
 * To request this dataset, please email me at [yehonata.zion@msmail.ariel.ac.il](mailto:yehonata.zion@msmail.ariel.ac.il).
 
+## Results of our augmentation methods on presented datasets
+### Average augmentation with m = 2.
+<img src="images/research_figures_results/avg_2.png" alt="avg_2_compare" width="35%">
+
+### Model trained on original train set, test set: original VS modified MTU
+<img src="images/research_figures_results/original_vs_MTU_testset.png" alt="mtu_in_test" width="35%">
+
+### Model trained on original + MUT augmanted train set, test set: original VS modified MTU
+<img src="images/research_figures_results/train_with_mtu_test_on_origianl_vs_mtu.png" alt="mtu_in_train_and_test" width="40%">
+
+
+
+
 ## Data converter
 
 This code is used to convert data to fit the code required format. The code was originally implemented by [FlowPic](https://github.com/talshapira/FlowPic), and has been modified to fit our specific needs.
