@@ -145,4 +145,14 @@ To install the required modules using pip:
 pip install -r requirements.txt
 ```
 
+## Citation
 
+```
+@inproceedings{zion2025enhancing,
+  title={Enhancing Encrypted Internet Traffic Classification Through Advanced Data Augmentation Techniques},
+  author={Zion, Yehonatan and Aharon, Porat and Dubin, Ran and Dvir, Amit and Hajaj, Chen},
+  booktitle={ICC 2025-IEEE International Conference on Communications},
+  year={2025},
+  organization={IEEE}
+}
+```
